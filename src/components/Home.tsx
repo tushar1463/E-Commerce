@@ -62,12 +62,12 @@ export default function Home() {
   //const filteredShirts = shirts.filter(product => product.category === selectedCategory);
 
   return (
-    <View style={styles.container}>
-      {/* Background Image */}
-      <Image
+    <>
+    <Image
         style={{ height: '100%', width: '100%', position: 'absolute' }}
         source={{ uri: 'https://wallpapers.com/images/featured/blank-white-background-xbsfzsltjksfompa.jpg' }}
       />
+    <View style={styles.container}>
       {/* Header Component */}
       <Header />
       {/* <MenuNav /> */}
@@ -129,6 +129,7 @@ export default function Home() {
       </View>
       </ScrollView>
     </View>
+    </>
   );
 }
 
