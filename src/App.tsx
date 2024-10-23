@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, StatusBar } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, Image } from 'react-native';
 import React, {useState} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -55,28 +55,40 @@ export default function App() {
             component={HomeStack}
             options={{
               tabBarIcon: ({ color }) => (
-                <AntDesign name='home' size={30} color={color} />
+                // <AntDesign name='home' size={30} color={color} />
+                <Image source={require('./assets/home_icon.png')}
+                style={[styles.iconSize, {tintColor: color}]}
+                />
               ),
             }}
           />
           <Tab.Screen name='WishList' component={WishList} 
           options={{
             tabBarIcon: ({ color }) => (
-              <EvilIcons name='heart' size={40} color={color} />
+              // <EvilIcons name='heart' size={40} color={color} />
+              <Image source={require('./assets/Wishlist.png')}
+              style={[styles.iconSize, {tintColor: color}]}
+              />
             ),
           }}
           />
           <Tab.Screen name='MyCart' component={MyCart} 
           options={{
             tabBarIcon: ({ color }) => (
-              <AntDesign name='shoppingcart' size={30} color={color} />
+              //<AntDesign name='shoppingcart' size={30} color={color} />
+              <Image source={require('./assets/Cart.png')}
+              style={[styles.iconSize, {tintColor: color}]}
+              />
             ),
           }}
           />
           <Tab.Screen name='Account' component={Account} 
           options={{
             tabBarIcon: ({ color }) => (
-              <MaterialCommunityIcons name='account-circle-outline' size={30} color={color} />
+              //<MaterialCommunityIcons name='account-circle-outline' size={30} color={color} />
+              <Image source={require('./assets/profile_icon.png')}
+              style={[styles.iconSize, {tintColor: color}]}
+              />
             ),
           }}
           />
@@ -86,4 +98,9 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  iconSize: {
+    height: 25,
+    width: 25,
+  }
+});

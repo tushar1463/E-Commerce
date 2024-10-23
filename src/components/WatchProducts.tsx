@@ -1,5 +1,5 @@
 import { useNavigation, NavigationProp } from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { Image, StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -48,7 +48,10 @@ const WatchProducts = ({ products }: { products: Product[] }) => {
           <View style={styles.discountContainer}>
             <Text style={{ fontSize: 15, color: 'rgba(0, 0, 0, 0.75)' }}>50% OFF</Text>
             <TouchableOpacity onPress={() => toggleWishlist(item)}>
-              <Ionicons name='heart-circle-outline' size={35} color={isInWishlist(item) ? '#FF3E4D' : '#CFCFCF'} />
+              {/* <Ionicons name='heart-circle-outline' size={35} color={isInWishlist(item) ? '#FF3E4D' : '#CFCFCF'} /> */}
+              <Image source={require('../assets/wishlist_sb.png')}
+                style={{ height: 22, width: 22, tintColor: isInWishlist(item) ? '#FF3E4D' : '#CFCFCF' }}
+              />
             </TouchableOpacity>
           </View>
           <View style={styles.watch}>
@@ -61,8 +64,24 @@ const WatchProducts = ({ products }: { products: Product[] }) => {
             <Text style={styles.watchName}>{item.name}</Text>
           </View>
           <View style={styles.watchPrice}>
-            <Text><MaterialCommunityIcons name='currency-ngn' size={16} color='black' /> <Text style={{ fontSize: 16, color: 'black', fontWeight: 'bold' }}>{item.price}</Text></Text>
-            <Text><MaterialCommunityIcons name='currency-ngn' size={13} /><Text style={{color: '#AFAFAF', fontSize: 13, fontWeight: 'bold'}}>{item.discountPrice}</Text></Text>
+            <View style={styles.priceContainer}>
+              <Image
+                source={require('../assets/cur_syB.png')}
+                style={{ height: 20, width: 15.13, tintColor: 'black' }}
+              />
+              <Text style={{ fontSize: 14, color: 'black', fontWeight: 'bold' }}>
+                {item.price}
+              </Text>
+            </View>
+            <View style={styles.priceContainer}>
+              <Image
+                source={require('../assets/cur_sb.png')}
+                style={{ height: 12, width: 11.56, }}
+              />
+              <Text style={{ color: '#AFAFAF', fontSize: 10, fontWeight: 'bold' }}>
+                {item.discountPrice}
+              </Text>
+            </View>
           </View>
         </TouchableOpacity>
       )}
@@ -106,10 +125,14 @@ const styles = StyleSheet.create({
     fontWeight: 'medium',
   },
   watchPrice: {
-    marginTop: 5,
+    marginTop: 10,
     marginHorizontal: 10,
     flexDirection: 'row',
     justifyContent: 'space-between'
+  },
+  priceContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   productList: {
     marginTop: 20,
@@ -119,7 +142,6 @@ const styles = StyleSheet.create({
     marginLeft: -5,
     justifyContent: 'space-evenly',
     marginRight: 20,
-    marginBottom: 10,
   },
 });
 

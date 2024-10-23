@@ -62,7 +62,7 @@ export default function Home() {
   //const filteredShirts = shirts.filter(product => product.category === selectedCategory);
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       {/* Background Image */}
       <Image
         style={{ height: '100%', width: '100%', position: 'absolute' }}
@@ -113,6 +113,7 @@ export default function Home() {
           <Text style={styles.seeAllText}>See All</Text>
         </TouchableOpacity>
       </View>
+      <ScrollView contentContainerStyle={styles.scrollViewContainer}>
       <FlatList
         data={categories}
         horizontal={true}
@@ -122,9 +123,12 @@ export default function Home() {
         showsHorizontalScrollIndicator={false}
       />
       {/* Products */}
+      <View style={styles.productsContainer}>
       {selectedCategory === '1' && <WatchProducts products={filteredProducts} />}
       {selectedCategory === '2' && <Tshirts products={filteredProducts} />}
-    </ScrollView>
+      </View>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -233,7 +237,7 @@ const styles = StyleSheet.create({
   categoriesList: {
     flexDirection: 'row',
     marginHorizontal: 10,
-    margin: 20,
+    marginTop: 20,
   },
   allCategories: {
     borderWidth: 2,
@@ -249,5 +253,12 @@ const styles = StyleSheet.create({
   watchImage: {
     height: 25,
     width: 29,
+  },
+  scrollViewContainer: {
+    paddingBottom: 20,
+  },
+  productsContainer: {
+    paddingHorizontal: 10,
+    paddingBottom: 20,
   }
 });

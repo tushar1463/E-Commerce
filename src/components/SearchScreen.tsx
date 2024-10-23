@@ -4,6 +4,10 @@ import { Image, StyleSheet, Text, View, FlatList, TouchableOpacity, TextInput } 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../redux/rootReducer';
+import { addToWishlist, removeFromWishlist } from '../redux/action';
 
 const products = [
   { id: '1', name: 'Redmi Note 4', image: require('../assets/watch_1.png'), price: 45000, discountPrice: 55000, category: '1' },
@@ -42,13 +46,15 @@ const SearchScreen = () => {
     );
   };
 
-  const [wishlist, setWishlist] = useState<Product[]>([]);
+  const dispatch = useDispatch();
+
+  const wishlist = useSelector((state: RootState) => state.wishlist);
 
   const toggleWishlist = (product: Product) => {
     if (wishlist.some((item) => item.id === product.id)) {
-      setWishlist(wishlist.filter((item) => item.id !== product.id));
+      dispatch(removeFromWishlist(product.id));
     } else {
-      setWishlist([...wishlist, product]);
+      dispatch(addToWishlist(product));
     }
   };
 
@@ -64,10 +70,13 @@ const SearchScreen = () => {
         style={{ height: '100%', width: '100%', position: 'absolute' }}
         source={{ uri: 'https://wallpapers.com/images/featured/blank-white-background-xbsfzsltjksfompa.jpg' }}
       />
-      <View style={styles.container}>
-      <View style={styles.header}>
-          <TouchableOpacity style={styles.backArrow} onPress={() => { navigation.goBack() }}>
-            <FontAwesome6 name='arrow-left-long' size={20} color='black' />
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity style={styles.backArrow} onPress={() => { navigation.goBack() }} >
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+              <Image style={styles.arrowsize} source={require('../assets/back.png')} />
+              <Image style={styles.linesize} source={require('../assets/line.png')} />
+            </View>
           </TouchableOpacity>
           <View style={styles.headerHeading}>
             <Text style={styles.headingText}>Search Screen</Text>
@@ -83,39 +92,43 @@ const SearchScreen = () => {
           data={filteredProducts}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <FlatList
-              data={filteredProducts}
-              numColumns={2}
-              renderItem={({ item }) => (
-                <TouchableOpacity onPress={() => { navigation.navigate("PRODUCT_DETAILS", { product: item }) }} style={styles.watchesContainer}>
-                  <View style={styles.discountContainer}>
-                    <Text style={{ fontSize: 15, color: 'rgba(0, 0, 0, 0.75)' }}>50% OFF</Text>
-                    <TouchableOpacity onPress={() => toggleWishlist(item)}>
-                      <Ionicons name='heart-circle-outline' size={35} color={isInWishlist(item) ? 'red' : '#CFCFCF'} />
-                    </TouchableOpacity>
-                  </View>
-                  <View style={styles.watch}>
-                    <Image
-                      style={styles.watchImage}
-                      source={item.image}
-                    />
-                  </View>
-                  <View style={{ marginHorizontal: 10 }}>
-                    <Text style={styles.watchName}>{item.name}</Text>
-                  </View>
-                  <View style={styles.watchPrice}>
-                    <Text><MaterialCommunityIcons name='currency-ngn' size={16} color='black' /> <Text style={{ fontSize: 16, color: 'black', fontWeight: 'bold' }}>{item.price}</Text></Text>
-                    <Text><MaterialCommunityIcons name='currency-ngn' size={13} /><Text style={{ color: '#AFAFAF', fontSize: 13, fontWeight: 'bold' }}>{item.discountPrice}</Text></Text>
-                  </View>
+            <TouchableOpacity onPress={() => { navigation.navigate("PRODUCT_DETAILS", { product: item }) }} style={styles.watchesContainer}>
+              <View style={styles.discountContainer}>
+                <Text style={{ fontSize: 15, color: 'rgba(0, 0, 0, 0.75)' }}>50% OFF</Text>
+                <TouchableOpacity onPress={() => toggleWishlist(item)}>
+                  <Image source={require('../assets/wishlist_sb.png')}
+                    style={{ height: 22, width: 22, tintColor: isInWishlist(item) ? '#FF3E4D' : '#CFCFCF' }}
+                  />
                 </TouchableOpacity>
-              )}
-              keyExtractor={(item) => item.id}
-              contentContainerStyle={styles.productList}
-              columnWrapperStyle={styles.columnWrapper}
-            />
+              </View>
+              <View style={styles.watch}>
+                <Image
+                  style={styles.watchImage}
+                  source={item.image}
+                />
+              </View>
+              <View style={{ marginHorizontal: 10 }}>
+                <Text style={styles.watchName}>{item.name}</Text>
+              </View>
+              <View style={styles.watchPrice}>
+                <View style={{ flexDirection: 'row', marginLeft: 5, columnGap: 2 }}>
+                  <Image style={styles.curSb} source={require('../assets/cur_syB.png')} />
+                  <Text style={styles.priceText}>{item.price}</Text>
+                </View>
+                <View style={{ flexDirection: 'row', marginLeft: 5, columnGap: 2 }}>
+                  <Image style={styles.curSbOP} source={require('../assets/cur_sb.png')} />
+                  <Text style={{ color: '#AFAFAF', fontSize: 12, }}>{item.discountPrice}</Text>
+                </View>
+              </View>
+            </TouchableOpacity>
           )}
+          numColumns={2}
+          contentContainerStyle={styles.productList}
+          columnWrapperStyle={styles.columnWrapper}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
         />
-      </View>
+      </SafeAreaView>
     </>
   );
 };
@@ -133,11 +146,22 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'black',
     fontWeight: 'semibold',
-    left: 90,
+    left: 70,
   },
   backArrow: {
     left: 10,
-    top: 20,
+    top: 25,
+  },
+  linesize: {
+    width: 19.25,
+    height: 3,
+    tintColor: 'black',
+    left: -5,
+  },
+  arrowsize: {
+    width: 9.63,
+    height: 13.81,
+    top: 1
   },
   container: {
     flex: 1,
@@ -191,14 +215,30 @@ const styles = StyleSheet.create({
     fontWeight: 'medium',
   },
   watchPrice: {
-    marginTop: 5,
+    marginTop: 7,
     marginHorizontal: 10,
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
+  curSb: {
+    width: 15,
+    height: 21,
+    bottom: 3
+  },
+  priceText: {
+    fontSize: 14,
+    color: 'black',
+    fontWeight: '800',
+  },
+  curSbOP: {
+    width: 12.09,
+    height: 18,
+    bottom: 2,
+    tintColor: '#AFAFAF'
+  },
   productList: {
     marginTop: 20,
-    paddingBottom: 20,
+    marginLeft: -10
   },
   columnWrapper: {
     marginLeft: -5,

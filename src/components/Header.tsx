@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 import Fontisto from 'react-native-vector-icons/Fontisto';
@@ -17,13 +17,19 @@ export default function Header() {
         style={styles.headerLeft} 
         // onPress={() => navigation.toggleDrawer()}
       >
-        <Feather name='align-left' size={24} color='black' />
+        {/* <Feather name='align-left' size={24} color='black' /> */}
+        <Image source={require('../assets/Menu.png')} 
+        style={{height: 24, width: 24}}
+        />
       </TouchableOpacity>
       <TouchableOpacity 
         style={styles.headerRight}
         onPress={() => navigation.navigate('Search')}
       >
-        <Fontisto name='search' size={24} color='black' />
+        {/* <Fontisto name='search' size={24} color='black' /> */}
+        <Image source={require('../assets/search.png')} 
+        style={{height: 24, width: 24}}
+        />
       </TouchableOpacity>
     </View>
   );
@@ -44,7 +50,9 @@ const styles = StyleSheet.create({
     width: 41,
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 10,
+    marginTop: 30,
+    marginLeft: 10,
+    marginBottom: 10,
     padding: 10,
   },
   headerRight: {
@@ -54,7 +62,9 @@ const styles = StyleSheet.create({
     width: 41,
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 10,
+    marginRight: 10,
+    marginTop: 30,
+    marginBottom: 10,
     padding: 10,
   }
 });

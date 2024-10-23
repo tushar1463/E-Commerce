@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
 import { useNavigation, } from '@react-navigation/native';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -29,66 +29,75 @@ export default function MyCart() {
 
   const totalAmount = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
   return (
-    <ScrollView style={styles.myCartContainer} showsVerticalScrollIndicator={false}>
+    <>
       <Image
         style={{ height: '100%', width: '100%', position: 'absolute' }}
         source={{ uri: 'https://wallpapers.com/images/featured/blank-white-background-xbsfzsltjksfompa.jpg' }}
       />
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.backArrow} onPress={() => { navigation.goBack() }}>
-          <FontAwesome6 name='arrow-left-long' size={20} color='black' />
-        </TouchableOpacity>
-        <View style={styles.headerHeading}>
-          <Text style={styles.headingText}>My Cart</Text>
-        </View>
-      </View>
-      {/* Products */}
-      {cartItems.map((item) => (
-        <View key={item.id} style={styles.productContainer}>
-          <View style={styles.productImage}>
-            <Image style={styles.pISize} source={item.image} />
-          </View>
-          <View style={styles.pDetailsCon}>
-            <View style={styles.pName}>
-              <Text style={styles.pNameText}>{item.name}</Text>
-              <View style={styles.pPrice}>
-                <MaterialCommunityIcons name='currency-ngn' size={16} color='black' />
-                <Text style={styles.pPriceAmount}>{item.price}</Text>
+      <SafeAreaView>
+        <ScrollView style={styles.myCartContainer} showsVerticalScrollIndicator={false}>
+
+          {/* Header */}
+          <View style={styles.header}>
+            <TouchableOpacity style={styles.backArrow} onPress={() => { navigation.goBack() }} >
+              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                <Image style={styles.arrowsize} source={require('../assets/back.png')} />
+                <Image style={styles.linesize} source={require('../assets/line.png')} />
               </View>
+            </TouchableOpacity>
+            <View style={styles.headerHeading}>
+              <Text style={styles.headingText}>My Cart</Text>
             </View>
           </View>
-          <View style={styles.sizeCon}>
-            <Text style={styles.sizeText}>Size: {item.selectedSize}</Text>
-            <View style={styles.quantityCon}>
-              <TouchableOpacity style={styles.decrementBtn} onPress={() => handleDecrease(item.id)}>
-                <AntDesign name='minus' size={20} style={styles.decrementBtnText} />
-              </TouchableOpacity>
-              <View style={styles.quantityCount}>
-                <Text style={styles.quantityCountText}>{item.quantity}</Text>
+          {/* Products */}
+          {cartItems.map((item) => (
+            <View key={item.id} style={styles.productContainer}>
+              <View style={styles.productImage}>
+                <Image style={styles.pISize} source={item.image} />
               </View>
-              <TouchableOpacity style={styles.IncrementBtn} onPress={() => handleIncrease(item.id)}>
-                <Entypo name='plus' size={15} style={styles.IncrementBtnText} />
-              </TouchableOpacity>
+              <View style={styles.pDetailsCon}>
+                <View style={styles.pName}>
+                  <Text style={styles.pNameText}>{item.name}</Text>
+                  <View style={styles.pPrice}>
+                    <Image style={styles.curSb} source={require('../assets/cur_syB.png')} />
+
+                    <Text style={styles.pPriceAmount}>{item.price}</Text>
+                  </View>
+                </View>
+              </View>
+              <View style={styles.sizeCon}>
+                <Text style={styles.sizeText}>Size: {item.selectedSize}</Text>
+                <View style={styles.quantityCon}>
+                  <TouchableOpacity style={styles.decrementBtn} onPress={() => handleDecrease(item.id)}>
+                    <Image style={styles.decrementBtnText} source={require('../assets/minus.png')} />
+                  </TouchableOpacity>
+                  <View style={styles.quantityCount}>
+                    <Text style={styles.quantityCountText}>{item.quantity}</Text>
+                  </View>
+                  <TouchableOpacity style={styles.IncrementBtn} onPress={() => handleIncrease(item.id)}>
+                    <Image style={styles.IncrementBtnText} source={require('../assets/plus.png')} />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          ))}
+          {/* Total */}
+          <View style={styles.total}>
+            <Text style={styles.totalText}>Total</Text>
+            <View style={styles.totalAmount}>
+              <Image style={styles.cartCur} source={require('../assets/cart_cur.png')} />
+              <Text style={styles.totalAmountText}>{totalAmount}</Text>
             </View>
           </View>
-        </View>
-      ))}
-      {/* Total */}
-      <View style={styles.total}>
-        <Text style={styles.totalText}>Total</Text>
-        <View style={styles.totalAmount}>
-          <MaterialCommunityIcons name='currency-ngn' size={24} color='#F16A26' style={{ height: 20, width: 25, marginTop: 2, }} />
-          <Text style={styles.totalAmountText}>{totalAmount}</Text>
-        </View>
-      </View>
-      {/* Buy Now */}
-      <View style={{ height: 100, }}>
-        <TouchableOpacity style={styles.buyNowBtn}>
-          <Text style={styles.buyNowText}>BUY NOW</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+          {/* Buy Now */}
+          <View style={{ height: 100, }}>
+            <TouchableOpacity style={styles.buyNowBtn}>
+              <Text style={styles.buyNowText}>BUY NOW</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </>
   )
 }
 
@@ -111,6 +120,17 @@ const styles = StyleSheet.create({
   backArrow: {
     left: 20,
     top: 20,
+  },
+  linesize: {
+    width: 19.25,
+    height: 3,
+    tintColor: 'black',
+    left: -5,
+  },
+  arrowsize: {
+    width: 9.63,
+    height: 13.81,
+    top: 1
   },
   productContainer: {
     margin: 20,
@@ -148,6 +168,12 @@ const styles = StyleSheet.create({
   },
   pPrice: {
     flexDirection: 'row',
+    columnGap: 3
+  },
+  curSb: {
+    width: 15,
+    height: 21,
+    bottom: 3
   },
   pPriceAmount: {
     fontSize: 12.23,
@@ -174,13 +200,14 @@ const styles = StyleSheet.create({
     right: 30,
   },
   decrementBtn: {
-    width: 10,
-    height: 34.71,
-    marginHorizontal: 5,
+    marginLeft: 7,
+    marginRight: 5,
     justifyContent: 'center',
   },
   decrementBtnText: {
-    color: '#F17547'
+    tintColor: '#F17547',
+    height: 5,
+    width: 12
   },
   quantityCount: {
     margin: 5,
@@ -192,14 +219,14 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   IncrementBtn: {
-    width: 15,
-    height: 25.04,
     justifyContent: 'center',
     alignItems: 'center',
-    top: 5,
+    marginLeft: 3
   },
   IncrementBtnText: {
-    color: '#F17547'
+    tintColor: '#F17547',
+    width: 12,
+    height: 10,
   },
   total: {
     margin: 35,
@@ -214,6 +241,12 @@ const styles = StyleSheet.create({
   totalAmount: {
     flexDirection: 'row',
     margin: 5,
+    columnGap: 3
+  },
+  cartCur: {
+    height: 26,
+    width: 20.1,
+    bottom: 2,
   },
   totalAmountText: {
     color: '#F16A26',
